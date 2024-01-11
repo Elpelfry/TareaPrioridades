@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using TareaPrioridades.Components;
+using TareaPrioridades.DAL;
 
 namespace TareaPrioridades
 {
@@ -11,6 +13,9 @@ namespace TareaPrioridades
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            var ConStr = builder.Configuration.GetConnectionString("ConStr");
+            builder.Services.AddDbContext<Contexto>(options => options.UseSqlite(ConStr));
 
             var app = builder.Build();
 
