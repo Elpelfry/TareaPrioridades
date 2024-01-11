@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TareaPrioridades.BLL;
 using TareaPrioridades.Components;
 using TareaPrioridades.DAL;
 
@@ -16,6 +17,7 @@ namespace TareaPrioridades
 
             var ConStr = builder.Configuration.GetConnectionString("ConStr");
             builder.Services.AddDbContext<Contexto>(options => options.UseSqlite(ConStr));
+            builder.Services.AddScoped<PrioridadesBLL>();
 
             var app = builder.Build();
 
