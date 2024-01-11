@@ -1,5 +1,7 @@
 
-
+.short-input {
+    width: 80px;
+}
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
