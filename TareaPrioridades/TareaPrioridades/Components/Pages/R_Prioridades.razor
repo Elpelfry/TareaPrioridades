@@ -1,8 +1,83 @@
-﻿
+﻿@page "/RPrioridades";
+@page "/RPrioridades/{PrioridadId:int}";
+@rendermode InteractiveServer
+@inject PrioridadesBLL prioridadesBLL;
+
+<EditForm Model="prioridades" OnValidSubmit="Guardar">
+    <div class=" card">
+
+        <div class="card-header">
+            <h1>Registro de Prioridades</h1>
+        </div>
+
+        <div class="card-body">
+
+            <label>PrioridadId</label>
+
+            <div class="input-group">
+                <InputNumber @bind-Value="prioridades.PrioridadId" class="id-input"></InputNumber>
+                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+            </div>
+
+            <div>
+                <label>Descripci&oacute;n</label>
+                <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
+                @*hay que validar las descripciones*@
+
+                <label>Dias Compromiso</label>
+                <InputNumber @bind-Value="prioridades.DiasCompromiso" class="form-control"></InputNumber>
+                <ValidationMessage For="@(() => prioridades.DiasCompromiso)" />
+
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo<i class=" bi bi-file-earmark-diff-fill" /></button>
+                <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button>
+                <button type="button" class="btn btn-danger">Eliminar<i class="bi bi-trash-fill " /></button>
+            </div>
 
 
-<h3>R_Prioridades</h3>
+        </div>
+
+    </div>
+
+
+</EditForm>
+
 
 @code {
+
+    [Parameter]
+    public int PrioridadId { get; set; }
+
+    public Prioridades prioridades = new Prioridades();
+    private bool descripciónExistente = false;
+
+    protected override void OnInitialized()
+    {
+        if (PrioridadId > 0)
+        {
+            prioridades.PrioridadId = PrioridadId;
+            Buscar();
+        }
+    }
+    public void Buscar()
+    {
+
+    }
+    
+    public void Nuevo()
+    {
+        this.prioridades = new Prioridades();
+        descripciónExistente = false;
+    }
+    public void Guardar()
+    {
+
+    }
+    public void Eliminar()
+    {
+
+    }
 
 }
