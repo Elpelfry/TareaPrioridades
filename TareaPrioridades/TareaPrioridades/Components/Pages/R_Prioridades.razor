@@ -12,7 +12,7 @@
         <div class="card-body">
             <label>PrioridadId</label>
             <div >
-                <InputNumber @bind-Value="prioridades.PrioridadId" ></InputNumber>
+                <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar"></InputNumber>
                 <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
                 @if (_existeid)@*Si _existeid es verdadero muestra el mensaje*@
                 {
@@ -21,7 +21,7 @@
             </div>
             <div >
                 <label>Descripci&oacute;n</label>
-                <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
+                <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
                 @if (_existe)@*Si _existe es verdadero muestra alerta al guardar*@
                 {
@@ -30,14 +30,19 @@
             </div>
             <div>
                 <label>Dias Compromiso</label><br />
-                <InputNumber @bind-Value="prioridades.DiasCompromiso" ></InputNumber>
+                <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar"></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)"/>
             </div>
         </div>
         <div class="card-footer">
-            <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo<i class=" bi bi-file-earmark-diff-fill" /></button>
+            <button type="button" class="btn btn-primary" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo<i class=" bi bi-file-earmark-diff-fill" /></button>
             <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar<i class="bi bi-trash-fill " /></button>
-            <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button>
+            <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button> 
+            @if(_guardar)@*Muestro la alerta de que se guardó correctamente*@
+            {
+              <br /> 
+              <p class="text-success">Prioridad guardada</p>
+            }
         </div>
     </div>
 </EditForm>
@@ -49,7 +54,8 @@
     public int PrioridadId { get; set; }
     public Prioridades prioridades = new Prioridades();
     private bool _existe = false;
-    private bool _existeid = false;
+    private bool _existeid = false;  
+    private bool _guardar = false;
 
     protected override void OnInitialized()
     {
@@ -94,6 +100,7 @@
         if (Validar())
             return;
         var guardo = prioridadesBLL.Guardar(this.prioridades);
+        _guardar = true;
         Nuevo();
     }
 
@@ -104,5 +111,10 @@
             prioridadesBLL.Eliminar(this.prioridades);
             this.Nuevo();
         }
+    }
+
+    public void MensajeGuardar()
+    {
+        _guardar = false;
     }
 }
