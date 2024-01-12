@@ -14,6 +14,10 @@
             <div >
                 <InputNumber @bind-Value="prioridades.PrioridadId" ></InputNumber>
                 <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                @if (_existeid)@*Si existe es verdadero evita guardar y escribe el parrafo*@
+                {
+                    <p class="text-danger">No se encontr&oacute; la prioridad</p>
+                }
             </div>
             <div >
                 <label>Descripci&oacute;n</label>
@@ -45,7 +49,8 @@
     public int PrioridadId { get; set; }
     public Prioridades prioridades = new Prioridades();
     private bool _existe = false;
-   
+    private bool _existeid = false;
+
     protected override void OnInitialized()
     {
         if (PrioridadId > 0)
@@ -61,6 +66,12 @@
         if (prioridadEncontrada != null)
         {
             this.prioridades = prioridadEncontrada;
+            _existeid = false;
+        }
+        else 
+        {
+            this.prioridades = new Prioridades();
+            _existeid = true;
         }
     }
 
@@ -68,6 +79,7 @@
     {
         this.prioridades = new Prioridades();
         _existe = false;
+        _existeid = false;
     }
 
     public bool Validar()
