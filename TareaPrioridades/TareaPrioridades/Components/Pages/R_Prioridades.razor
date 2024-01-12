@@ -6,51 +6,36 @@
 <EditForm Model="prioridades" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class=" card">
-
         <div class="card-header">
             <h1>Registro de Prioridades</h1>
         </div>
-
         <div class="card-body">
-
             <label>PrioridadId</label>
-
             <div >
                 <InputNumber @bind-Value="prioridades.PrioridadId" ></InputNumber>
                 <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
             </div>
-
             <div >
                 <label>Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
-                @if (_existe)@*Si existe es verdadero evita guardar*@
+                @if (_existe)@*Si existe es verdadero evita guardar y escribe el parrafo*@
                 {
                     <p class="text-danger">Descripci&oacute;n ya se encuentra registrada</p>
                 }
-                
             </div>
-
             <div>
                 <label>Dias Compromiso</label><br />
                 <InputNumber @bind-Value="prioridades.DiasCompromiso" ></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)"/>
-
             </div>
-           
-            
         </div>
-
-        
-
         <div class="card-footer">
             <button type="button" class="btn btn-primary" @onclick="Nuevo">Nuevo<i class=" bi bi-file-earmark-diff-fill" /></button>
-            <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button>
             <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar<i class="bi bi-trash-fill " /></button>
+            <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button>
         </div>
     </div>
-
-
 </EditForm>
 
 
@@ -58,10 +43,9 @@
 
     [Parameter]
     public int PrioridadId { get; set; }
-
     public Prioridades prioridades = new Prioridades();
     private bool _existe = false;
-
+   
     protected override void OnInitialized()
     {
         if (PrioridadId > 0)
@@ -74,7 +58,6 @@
     {
         _existe = false;
         var prioridadEncontrada = prioridadesBLL.Buscar(prioridades.PrioridadId);
-
         if (prioridadEncontrada != null)
         {
             this.prioridades = prioridadEncontrada;
@@ -86,21 +69,22 @@
         this.prioridades = new Prioridades();
         _existe = false;
     }
+
     public bool Validar()
     {
         _existe = (prioridadesBLL.Listar(p => p.Descripcion!.ToLower() == prioridades.Descripcion!.ToLower()
         && p.PrioridadId != prioridades.PrioridadId).Any());
-
         return _existe;
     }
+
     public void Guardar()
     {
         if (Validar())
             return;
-
         var guardo = prioridadesBLL.Guardar(this.prioridades);
         Nuevo();
     }
+
     public void Eliminar()
     {
         if (prioridadesBLL.Existe(prioridades.PrioridadId))
@@ -108,11 +92,5 @@
             prioridadesBLL.Eliminar(this.prioridades);
             this.Nuevo();
         }
-        else
-        {
-            return;
-        }
-
     }
-
 }
