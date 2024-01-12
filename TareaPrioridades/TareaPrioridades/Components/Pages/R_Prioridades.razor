@@ -13,7 +13,7 @@
             <label>PrioridadId</label>
             <div >
                 <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar"></InputNumber>
-                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar" ></button>
                 @if (_existeid)@*Si _existeid es verdadero muestra el mensaje*@
                 {
                     <p class="text-danger">No se encontr&oacute; la prioridad</p>
@@ -68,6 +68,7 @@
     public void Buscar()
     {
         _existe = false;
+        MensajeGuardar();
         var prioridadEncontrada = prioridadesBLL.Buscar(prioridades.PrioridadId);
         if (prioridadEncontrada != null)
         {
