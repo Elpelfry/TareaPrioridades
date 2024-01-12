@@ -87,6 +87,7 @@
         this.prioridades = new Prioridades();
         _existe = false;
         _existeid = false;
+        
     }
 
     public bool Validar()
@@ -111,6 +112,10 @@
         {
             prioridadesBLL.Eliminar(this.prioridades);
             this.Nuevo();
+        }
+        else
+        {
+            MensajeGuardar();
         }
     }
 
