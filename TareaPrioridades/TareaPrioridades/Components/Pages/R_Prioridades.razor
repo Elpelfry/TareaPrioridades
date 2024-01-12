@@ -23,7 +23,7 @@
                 <label>Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
-                @if (_existe)@*Si _existe es verdadero evita guardar y escribe el parrafo*@
+                @if (_existe)@*Si _existe es verdadero muestra alerta al guardar*@
                 {
                     <p class="text-danger">Descripci&oacute;n ya se encuentra registrada</p>
                 }
