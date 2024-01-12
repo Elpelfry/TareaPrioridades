@@ -14,7 +14,7 @@
             <div >
                 <InputNumber @bind-Value="prioridades.PrioridadId" ></InputNumber>
                 <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
-                @if (_existeid)@*Si existe es verdadero evita guardar y escribe el parrafo*@
+                @if (_existeid)@*Si _existeid es verdadero muestra el mensaje*@
                 {
                     <p class="text-danger">No se encontr&oacute; la prioridad</p>
                 }
@@ -23,7 +23,7 @@
                 <label>Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
-                @if (_existe)@*Si existe es verdadero evita guardar y escribe el parrafo*@
+                @if (_existe)@*Si _existe es verdadero evita guardar y escribe el parrafo*@
                 {
                     <p class="text-danger">Descripci&oacute;n ya se encuentra registrada</p>
                 }
