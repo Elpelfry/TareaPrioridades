@@ -92,7 +92,7 @@
 
     public bool Validar()
     {
-        _existe = (prioridadesBLL.Listar(p => p.Descripcion!.ToLower() == prioridades.Descripcion!.ToLower() 
+        _existe = (prioridadesBLL.Listar(p => p.Descripcion!.ToLower().Replace(" ", "") == prioridades.Descripcion!.ToLower().Replace(" ", "")
                   && p.PrioridadId != prioridades.PrioridadId).Any());
         return _existe;
     }
