@@ -40,8 +40,8 @@
             <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button> 
             @if(_guardar)@*Muestro la alerta de que se guardó correctamente*@
             {
-              <br /> 
-              <p class="text-success">Prioridad guardada</p>
+                <br />
+                <p class="text-success">Prioridad guardada</p>
             }
         </div>
     </div>
@@ -65,6 +65,7 @@
             Buscar();
         }
     }
+    
     public void Buscar()
     {
         _existe = false;
@@ -87,13 +88,12 @@
         this.prioridades = new Prioridades();
         _existe = false;
         _existeid = false;
-        
     }
 
     public bool Validar()
     {
-        _existe = (prioridadesBLL.Listar(p => p.Descripcion!.ToLower() == prioridades.Descripcion!.ToLower()
-        && p.PrioridadId != prioridades.PrioridadId).Any());
+        _existe = (prioridadesBLL.Listar(p => p.Descripcion!.ToLower() == prioridades.Descripcion!.ToLower() 
+                  && p.PrioridadId != prioridades.PrioridadId).Any());
         return _existe;
     }
 
