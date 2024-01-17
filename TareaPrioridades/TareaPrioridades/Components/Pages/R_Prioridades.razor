@@ -57,20 +57,20 @@
     private bool _existeid = false;  
     private bool _guardar = false;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         if (PrioridadId > 0)
         {
             prioridades.PrioridadId = PrioridadId;
-            Buscar();
+            await Buscar();
         }
     }
-    
-    public void Buscar()
+
+    public async Task Buscar()
     {
         _existe = false;
         MensajeGuardar();
-        var prioridadEncontrada = prioridadesBLL.Buscar(prioridades.PrioridadId);
+        var prioridadEncontrada = await prioridadesBLL.Buscar(prioridades.PrioridadId);
         if (prioridadEncontrada != null)
         {
             this.prioridades = prioridadEncontrada;
@@ -90,27 +90,26 @@
         _existeid = false;
     }
 
-    public bool Validar()
+    public async Task Guardar()
     {
-        _existe = (prioridadesBLL.Listar(p => p.Descripcion!.ToLower().Replace(" ", "") == prioridades.Descripcion!.ToLower().Replace(" ", "")
-                  && p.PrioridadId != prioridades.PrioridadId).Any());
-        return _existe;
-    }
 
-    public void Guardar()
-    {
-        if (Validar())
-            return;
-        var guardo = prioridadesBLL.Guardar(this.prioridades);
-        _guardar = true;
-        Nuevo();
-    }
-
-    public void Eliminar()
-    {
-        if (prioridadesBLL.Existe(prioridades.PrioridadId))
+        var guardo = await prioridadesBLL.Guardar(this.prioridades);
+        if(!guardo)
         {
-            prioridadesBLL.Eliminar(this.prioridades);
+            _existe = true;
+        }
+        else
+        {
+           _guardar = true;
+            Nuevo();
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        if (await prioridadesBLL.Existe(prioridades.PrioridadId))
+        {
+            await prioridadesBLL.Eliminar(this.prioridades);
             this.Nuevo();
         }
         else

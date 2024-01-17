@@ -1,58 +1,71 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using TareaPrioridades.Components.Pages;
 using TareaPrioridades.DAL;
 using TareaPrioridades.Models;
 
-namespace TareaPrioridades.BLL
+namespace TareaPrioridades.BLL;
+
+public class PrioridadesBLL
 {
-    public class PrioridadesBLL
+    private readonly Contexto _contexto;
+
+    public PrioridadesBLL(Contexto contexto)
     {
-        private readonly Contexto _contex;
+        _contexto = contexto;
+    }
+    public async Task<bool> Guardar(Prioridades prioridad)
+    {
+        if (_contexto.Prioridades!.Any(p => p.Descripcion!.ToLower().Replace(" ","") == prioridad.Descripcion!.ToLower().Replace(" ", "") 
+        && p.PrioridadId != prioridad.PrioridadId))
+        {
+            return false;
+        }
+        if (!await Existe(prioridad.PrioridadId))
+            return await Insertar(prioridad);
+        else
+            return await Modificar(prioridad);
+    }
 
-        public PrioridadesBLL(Contexto contexto)
-        {
-            _contex = contexto;
-        }
-        public bool Existe(int PrioridadId)
-        {
-            return _contex.Prioridades.Any(p => p.PrioridadId == PrioridadId);
-        }
+    private async Task<bool> Insertar(Prioridades prioridad)
+    {
+        _contexto.Prioridades!.Add(prioridad);
+        return await _contexto.SaveChangesAsync() > 0;
+    }
 
-        public bool Insertar(Prioridades Prioridades)
-        {
-            _contex.Prioridades.Add(Prioridades);
-            return _contex.SaveChanges() > 0;
-        }
+    public async Task<bool> Modificar(Prioridades prioridad)
+    {
+        _contexto.Update(prioridad);
+        return await _contexto.SaveChangesAsync() > 0;
+    }
 
-        public bool Modificar(Prioridades Prioridades)
-        {
-            var p = _contex.Prioridades.Find(Prioridades.PrioridadId);
-            _contex.Entry(p!).State = EntityState.Detached;
-            _contex.Entry(Prioridades).State = EntityState.Modified;
-            return _contex.SaveChanges() > 0;
-        }
-        public bool Guardar(Prioridades Prioridades)
-        {
-            if (!Existe(Prioridades.PrioridadId))
-                return this.Insertar(Prioridades);
-            else
-                return this.Modificar(Prioridades);
-        }
-        public bool Eliminar(Prioridades Prioridades)
-        {
-            var p = _contex.Prioridades.Find(Prioridades.PrioridadId);
-            _contex.Entry(p!).State = EntityState.Detached;
-            _contex.Entry(Prioridades).State = EntityState.Deleted;
-            return _contex.SaveChanges() > 0;
-        }
+    public async Task<bool> Existe(int PrioridadId)
+    {
+        return await _contexto.Prioridades!
+            .AnyAsync(p => p.PrioridadId == PrioridadId);
+    }
 
-        public Prioridades? Buscar(int PrioridadId)
-        {
-            return _contex.Prioridades.AsNoTracking().SingleOrDefault(a => a.PrioridadId == PrioridadId);
-        }
-        public List<Prioridades> Listar(Expression<Func<Prioridades, bool>> Criterio)
-        {
-            return _contex.Prioridades.Where(Criterio).AsNoTracking().ToList();
-        }
+    public async Task<bool> Eliminar(Prioridades prioridad)
+    {
+        var cantidad = await _contexto.Prioridades!
+            .Where(p => p.PrioridadId == prioridad.PrioridadId)
+            .ExecuteDeleteAsync();
+
+        return cantidad > 0;
+    }
+
+    public async Task<Prioridades?> Buscar(int prioridadId)
+    {
+        return await _contexto.Prioridades!
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.PrioridadId == prioridadId);
+    }
+
+    public async Task<List<Prioridades>> Listar(Expression<Func<Prioridades, bool>> criterio)
+    {
+        return await _contexto.Prioridades!
+            .AsNoTracking()
+            .Where(criterio)
+            .ToListAsync();
     }
 }
