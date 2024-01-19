@@ -1,4 +1,14 @@
 
+.number-input {
+    width: 150px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+.alert-size {
+    width: 285px;
+    border: 1px;
+    border-radius: 0.25rem;
+}
 .short-input {
     width: 80px;
 }

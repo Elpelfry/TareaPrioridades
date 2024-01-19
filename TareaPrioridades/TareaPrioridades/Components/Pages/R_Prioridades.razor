@@ -5,43 +5,40 @@
 
 <EditForm Model="prioridades" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <div class=" card">
+    <div class="card">
         <div class="card-header">
             <h1>Registro de Prioridades</h1>
         </div>
         <div class="card-body">
             <label>PrioridadId</label>
-            <div >
-                <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar"></InputNumber>
-                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar" ></button>
-                @if (_existeid)@*Si _existeid es verdadero muestra el mensaje*@
-                {
-                    <p class="text-danger">No se encontr&oacute; la prioridad</p>
-                }
+            <div class="input-group">
+                <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar" class="number-input"></InputNumber>
+                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
             </div>
             <div >
                 <label>Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
-                @if (_existe)@*Si _existe es verdadero muestra alerta al guardar*@
-                {
-                    <p class="text-danger">Descripci&oacute;n ya se encuentra registrada</p>
-                }
             </div>
+            <label>Dias Compromiso</label>
             <div>
-                <label>Dias Compromiso</label><br />
-                <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar"></InputNumber>
+                <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" class="number-input"></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)"/>
             </div>
         </div>
         <div class="card-footer">
-            <button type="button" class="btn btn-primary" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo<i class=" bi bi-file-earmark-diff-fill" /></button>
-            <button type="button" class="btn btn-danger" @onclick="Eliminar">Eliminar<i class="bi bi-trash-fill " /></button>
-            <button type="submit" class="btn btn-success">Guardar<i class="bi bi-floppy-fill" /></button> 
-            @if(_guardar)@*Muestro la alerta de que se guardó correctamente*@
+            <div class="input-group">
+                <button type="button" class="btn btn-primary bi bi-file-earmark-diff-fill" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo</button>
+                <button type="button" class="btn btn-danger bi bi-trash-fill" @onclick="Eliminar">Eliminar</button>
+                <button type="submit" class="btn btn-success bi bi-floppy-fill">Guardar</button>
+            </div>
+            @if (resultado==1)
             {
-                <br />
-                <p class="text-success">Prioridad guardada</p>
+                <p class="alert-success alert-size">@mensaje</p>
+            }
+            else if(resultado == 2)
+            {
+                <p class="alert-danger alert-size">@mensaje</p>
             }
         </div>
     </div>
@@ -53,55 +50,44 @@
     [Parameter]
     public int PrioridadId { get; set; }
     public Prioridades prioridades = new Prioridades();
-    private bool _existe = false;
-    private bool _existeid = false;  
-    private bool _guardar = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (PrioridadId > 0)
-        {
-            prioridades.PrioridadId = PrioridadId;
-            await Buscar();
-        }
-    }
+    public string? mensaje { get; set; }
+    public int resultado { get; set; }
 
     public async Task Buscar()
     {
-        _existe = false;
         MensajeGuardar();
         var prioridadEncontrada = await prioridadesBLL.Buscar(prioridades.PrioridadId);
         if (prioridadEncontrada != null)
         {
             this.prioridades = prioridadEncontrada;
-            _existeid = false;
         }
         else 
         {
             this.prioridades = new Prioridades();
-            _existeid = true;
+            resultado = 2;
+            mensaje = "Registro no Encontrado";
         }
     }
 
     public void Nuevo()
     {
-        this.prioridades = new Prioridades();
-        _existe = false;
-        _existeid = false;
+        prioridades = new Prioridades();
+        MensajeGuardar();
     }
 
     public async Task Guardar()
     {
-
         var guardo = await prioridadesBLL.Guardar(this.prioridades);
-        if(!guardo)
+        if(guardo)
         {
-            _existe = true;
+            resultado = 1;
+            mensaje = "Registro Guardado";
+            prioridades = new Prioridades();
         }
         else
         {
-           _guardar = true;
-            Nuevo();
+            resultado = 2;
+            mensaje = "Registro No Guardado Descripción Ya Existe";
         }
     }
 
@@ -111,16 +97,19 @@
         {
             await prioridadesBLL.Eliminar(this.prioridades);
             this.Nuevo();
+            resultado = 1;
+            mensaje = "Registro Eliminado";
         }
         else
         {
-            MensajeGuardar();
+            resultado = 2;
+            mensaje = "No Eliminado";
         }
     }
 
     public void MensajeGuardar()
     {
-        _guardar = false;
-        _existeid = false;
+        resultado = 0;
+        mensaje = string.Empty;
     }
 }
