@@ -17,7 +17,7 @@ namespace TareaPrioridades.Migrations
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    Telefono = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true),
+                    Telefono = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     Celular = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     RNC = table.Column<string>(type: "TEXT", maxLength: 9, nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),

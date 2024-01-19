@@ -10,7 +10,7 @@ using TareaPrioridades.DAL;
 namespace TareaPrioridades.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240117042130_Cliente")]
+    [Migration("20240119225151_Cliente")]
     partial class Cliente
     {
         /// <inheritdoc />
@@ -48,6 +48,7 @@ namespace TareaPrioridades.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 

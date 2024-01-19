@@ -10,19 +10,19 @@
             <h1>Registro de Prioridades</h1>
         </div>
         <div class="card-body">
-            <label>PrioridadId</label>
+            <label>PrioridadID</label>
             <div class="input-group">
-                <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar" class="number-input"></InputNumber>
+                <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
                 <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
             </div>
             <div >
                 <label>Descripci&oacute;n</label>
-                <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control"></InputText>
+                <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control" ></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
             </div>
             <label>Dias Compromiso</label>
             <div>
-                <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" class="number-input"></InputNumber>
+                <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)"/>
             </div>
         </div>
@@ -53,6 +53,15 @@
     public string? mensaje { get; set; }
     public int resultado { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (PrioridadId > 0)
+        {
+            prioridades.PrioridadId = PrioridadId;
+            await Buscar();
+        }
+    }
+
     public async Task Buscar()
     {
         MensajeGuardar();
@@ -71,7 +80,7 @@
 
     public void Nuevo()
     {
-        prioridades = new Prioridades();
+        this.prioridades = new Prioridades();
         MensajeGuardar();
     }
 
@@ -82,7 +91,7 @@
         {
             resultado = 1;
             mensaje = "Registro Guardado";
-            prioridades = new Prioridades();
+            Nuevo();
         }
         else
         {

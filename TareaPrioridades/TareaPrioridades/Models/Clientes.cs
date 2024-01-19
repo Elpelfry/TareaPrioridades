@@ -11,17 +11,18 @@ public class Clientes
     [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "El Nombre debe contener solo letras.")]
     public string? Nombre { get; set; }
 
-    [StringLength(10, ErrorMessage = "No Puede Exceder los 10 Caracteres")]
+    [Required(ErrorMessage = "El Teléfono es un campo obligatorio.")]
+    [StringLength(maximumLength: 10, MinimumLength = 10, ErrorMessage = "La longitud debe ser de 10 dígitos")]
     [RegularExpression("^[0-9]+$", ErrorMessage = "El Numero de teléfono solo puede contener dígitos.")]
     public string? Telefono { get; set; }
 
     [Required(ErrorMessage = "El Celular es un campo obligatorio.")]
-    [StringLength(10, ErrorMessage = "No Puede Exceder los 10 Caracteres")]
+    [StringLength(maximumLength: 10, MinimumLength = 10, ErrorMessage = "La longitud debe ser de 10 dígitos")]
     [RegularExpression("^[0-9]+$", ErrorMessage = "El Celular solo puede contener digitos.")]
     public string? Celular { get; set; }
 
     [Required(ErrorMessage = "El RNC es un campo obligatorio.")]
-    [StringLength(9, ErrorMessage = "No Puede Exceder los 9 Caracteres")]
+    [StringLength(maximumLength: 9, MinimumLength = 9, ErrorMessage = "La longitud debe ser de 9 dígitos")]
     [RegularExpression("^[0-9]+$", ErrorMessage = "El RNC solo puede contener digitos.")]
     public string? RNC { get; set; }
 

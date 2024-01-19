@@ -16,6 +16,15 @@ public class ClientesBLL
 
     public async Task<bool> Guardar(Clientes cliente)
     {
+        //if (_contexto.Clientes!.Any(c => c.Nombre!.ToLower().Replace(" ", "") == cliente.Nombre!.ToLower().Replace(" ", "")
+        //&& c.ClienteId != cliente.ClienteId))
+        //{
+        //    return false;
+        //}
+        //if (_contexto.Clientes!.Any(c => c.RNC!.ToLower() == cliente.RNC!.ToLower() && c.ClienteId != cliente.ClienteId))
+        //{
+        //    return false;
+        //}
         if (!await Existe(cliente.ClienteId))
             return await Insertar(cliente);
         else
