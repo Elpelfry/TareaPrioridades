@@ -1,0 +1,43 @@
+﻿@page "/CPrioridades"
+@rendermode InteractiveServer
+@inject PrioridadesBLL prioridadesBLL;
+<PageTitle>Consulta Prioridades</PageTitle>
+
+<div class="card bg-dark">
+    <div class="card-header bg-dark">
+        <h1 class="text-light">Consulta de Prioridades</h1>
+    </div>
+    <div>
+        <table class="table table-light table-hover table-striped table-bordered ">
+            <thead class="table table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Descripci&oacute;n</th>
+                    <th scope="col">Dias Compromiso</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ListaPrioridades)
+                {
+                    <tr>
+                        <th scope="row">@item.PrioridadId</th>
+                        <td>@item.Descripcion</td>
+                        <td>@item.DiasCompromiso</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="card-header text-white">
+            <p>Cantidad de Prioridades: @ListaPrioridades.Count</p>
+        </div>
+    </div>
+</div>
+@code {
+
+    public List<Prioridades> ListaPrioridades = new List<Prioridades>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPrioridades = await prioridadesBLL.Listar(c => true);
+    }
+}

@@ -16,15 +16,8 @@ public class ClientesBLL
 
     public async Task<bool> Guardar(Clientes cliente)
     {
-        //if (_contexto.Clientes!.Any(c => c.Nombre!.ToLower().Replace(" ", "") == cliente.Nombre!.ToLower().Replace(" ", "")
-        //&& c.ClienteId != cliente.ClienteId))
-        //{
-        //    return false;
-        //}
-        //if (_contexto.Clientes!.Any(c => c.RNC!.ToLower() == cliente.RNC!.ToLower() && c.ClienteId != cliente.ClienteId))
-        //{
-        //    return false;
-        //}
+        if (await Validar(cliente))
+            return false;
         if (!await Existe(cliente.ClienteId))
             return await Insertar(cliente);
         else
@@ -40,9 +33,17 @@ public class ClientesBLL
     public async Task<bool> Modificar(Clientes cliente)
     {
         _contexto.Update(cliente);
-        return await _contexto.SaveChangesAsync() > 0;
+        int cantidad = await _contexto.SaveChangesAsync();
+        _contexto.Entry(cliente).State = EntityState.Detached;
+        return  cantidad > 0;
     }
-
+    public async Task<bool> Validar(Clientes cliente)
+    {
+        var resultado = await (_contexto.Clientes!.AnyAsync(c =>
+        (c.Nombre!.ToLower().Replace(" ", "") == cliente.Nombre!.ToLower().Replace(" ", "")
+        || c.RNC! == cliente.RNC!) && c.ClienteId != cliente.ClienteId));
+        return resultado;
+    }
     public async Task<bool> Existe(int ClienteId)
     {
         return await _contexto.Clientes!
@@ -54,7 +55,6 @@ public class ClientesBLL
         var cantidad = await _contexto.Clientes!
             .Where(p => p.ClienteId == cliente.ClienteId)
             .ExecuteDeleteAsync();
-
         return cantidad > 0;
     }
 

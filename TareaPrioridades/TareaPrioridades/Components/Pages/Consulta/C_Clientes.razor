@@ -1,0 +1,51 @@
+﻿@page "/CClientes"
+@rendermode InteractiveServer
+@inject ClientesBLL clientesBLL;
+<PageTitle>Consulta Clientes</PageTitle>
+
+<div class="card bg-dark">
+    <div class="card-header bg-dark">
+        <h1 class="text-light">Consulta de Clientes</h1>
+    </div>
+    <div>
+        <table class="table table-light table-hover table-striped table-bordered ">
+            <thead class="table table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tel&eacute;fono</th>
+                    <th scope="col">Celular</th>
+                    <th scope="col">RNC</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Direcci&oacute;n</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ListaClientes)
+                {
+                    <tr>
+                        <th scope="row">@item.ClienteId</th>
+                        <td>@item.Nombre</td>
+                        <td>@item.Telefono</td>
+                        <td>@item.Celular</td>
+                        <td>@item.RNC</td>
+                        <td>@item.Email</td>
+                        <td>@item.Direccion</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="card-header text-white">
+            <p>Cantidad de Clientes: @ListaClientes.Count</p>
+        </div>
+    </div>
+</div>
+@code {
+
+    public List<Clientes> ListaClientes = new List<Clientes>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await clientesBLL.Listar(c => true);
+    }
+}

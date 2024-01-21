@@ -35,8 +35,10 @@ public class PrioridadesBLL
 
     public async Task<bool> Modificar(Prioridades prioridad)
     {
-        _contexto.Update(prioridad);
-        return await _contexto.SaveChangesAsync() > 0;
+        var p = await _contexto.Prioridades!.FindAsync(prioridad.PrioridadId);
+        _contexto.Entry(p!).State = EntityState.Detached;
+        _contexto.Entry(prioridad).State = EntityState.Modified;
+        return _contexto.SaveChanges() > 0;
     }
 
     public async Task<bool> Existe(int PrioridadId)
@@ -50,7 +52,6 @@ public class PrioridadesBLL
         var cantidad = await _contexto.Prioridades!
             .Where(p => p.PrioridadId == prioridad.PrioridadId)
             .ExecuteDeleteAsync();
-
         return cantidad > 0;
     }
 
