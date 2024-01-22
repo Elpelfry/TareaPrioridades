@@ -12,18 +12,23 @@
             <h1 class="text-light">Registro de Prioridades</h1>
         </div>
         <div class="card-body bg-light">
-            <label>PrioridadID</label>
+            
             <div class="input-group">
-                <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
-                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                <label>PrioridadID</label>
+                <div class="input-group">
+                    <InputNumber @bind-Value="prioridades.PrioridadId" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
+                    <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                </div>
             </div>
-            <div >
+            <div class="col-7">
                 <label>Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control" ></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)"/>
             </div>
-            <label>Dias Compromiso</label>
             <div>
+                <div class="row">
+                    <label>Dias Compromiso</label>
+                </div>
                 <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)"/>
             </div>

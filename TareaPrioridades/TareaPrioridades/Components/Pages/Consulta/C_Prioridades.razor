@@ -7,6 +7,29 @@
     <div class="card-header bg-dark">
         <h1 class="text-light">Consulta de Prioridades</h1>
     </div>
+    <div class="card-body bg-dark">
+        <div class="input-group filter-input barra-input">
+            <InputSelect @bind-Value="Opcion" class="form-select">
+                <option value="1">Prioridad Id</option>
+                <option value="2">Descripci&oacute;n</option>
+            </InputSelect>
+            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+        </div>
+
+        <div class="col-6">
+            @switch (Opcion)
+            {
+                case 1:
+                    <InputNumber @bind-Value="prioridades.PrioridadId" class="form-control"></InputNumber>
+                    break;
+                case 2:
+                    <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
+                    break;
+                default:
+                    break;
+            }
+        </div>
+    </div>
     <div>
         <table class="table table-light table-hover table-striped table-bordered ">
             <thead class="table table-dark">
@@ -35,9 +58,21 @@
 @code {
 
     public List<Prioridades> ListaPrioridades = new List<Prioridades>();
+    public Prioridades prioridades = new Prioridades();
+    public int Opcion { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         ListaPrioridades = await prioridadesBLL.Listar(c => true);
+    }
+    public async Task Buscar()
+    {
+        if (Opcion == 1 && prioridades.PrioridadId > 0)
+            ListaPrioridades = await prioridadesBLL.Listar(p => p.PrioridadId == prioridades.PrioridadId);
+
+        else if (Opcion == 2 && !string.IsNullOrEmpty(prioridades.Descripcion))
+            ListaPrioridades = await prioridadesBLL.Listar(p => p.Descripcion!.ToLower().Contains(prioridades.Descripcion.ToLower()));
+        else
+            ListaPrioridades = await prioridadesBLL.Listar(p => true);
     }
 }

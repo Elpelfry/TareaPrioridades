@@ -17,32 +17,36 @@
                 <InputNumber @bind-Value="clientes.ClienteId" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
                 <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
             </div>
-            <div >
-                <label>Nombre</label>
-                <InputText @bind-Value="clientes.Nombre" @oninput="MensajeGuardar" class="form-control number-input"></InputText>
-                <ValidationMessage For="@(() => clientes.Nombre)"/>
+            <div class="row">
+                <div class="col-3">
+                    <label>Nombres</label>
+                    <InputText @bind-Value="clientes.Nombre" @oninput="MensajeGuardar" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => clientes.Nombre)" />
+                </div>
+                <div class="col-3">
+                    <label>Tel&eacute;fono</label>
+                    <InputText @bind-Value="clientes.Telefono" @oninput="MensajeGuardar" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => clientes.Telefono)" />
+                </div>
             </div>
-            <div>
-                <label>Tel&eacute;fono</label>
-                <InputText @bind-Value="clientes.Telefono" @oninput="MensajeGuardar" class="form-control number-input"></InputText>
-                <ValidationMessage For="@(() => clientes.Telefono)"/>
+            <div class="row">
+                <div class="col-3">
+                    <label>Celular</label>
+                    <InputText @bind-Value="clientes.Celular" @oninput="MensajeGuardar" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => clientes.Celular)" />
+                </div>
+                <div class="col-3">
+                    <label>RNC</label>
+                    <InputText @bind-Value="clientes.RNC" @oninput="MensajeGuardar" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => clientes.RNC)" />
+                </div>
             </div>
-            <div>
-                <label>Celular</label>
-                <InputText @bind-Value="clientes.Celular" @oninput="MensajeGuardar" class="form-control number-input"></InputText>
-                <ValidationMessage For="@(() => clientes.Celular)"/>
-            </div>
-            <div>
-                <label>RNC</label>
-                <InputText @bind-Value="clientes.RNC" @oninput="MensajeGuardar" class="form-control number-input"></InputText>
-                <ValidationMessage For="@(() => clientes.RNC)" />
-            </div>
-            <div>
+            <div class="col-6">
                 <label>Email</label>
                 <InputText @bind-Value="clientes.Email" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => clientes.Email)" />
             </div>
-            <div>
+            <div class="col-6">
                 <label>Direcci&oacute;n</label>
                 <InputText @bind-Value="clientes.Direccion" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => clientes.Direccion)"/>

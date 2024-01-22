@@ -8,7 +8,7 @@ public class Clientes
     public int ClienteId { get; set; }
 
     [Required(ErrorMessage = "El Nombre es un campo obligatorio.")]
-    [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "El Nombre debe contener solo letras.")]
+    [RegularExpression("^[a-zA-Z ]+$", ErrorMessage = "El Nombre debe contener solo letras.")]
     public string? Nombre { get; set; }
 
     [Required(ErrorMessage = "El Teléfono es un campo obligatorio.")]

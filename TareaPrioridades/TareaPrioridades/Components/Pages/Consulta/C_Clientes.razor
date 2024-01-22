@@ -7,17 +7,45 @@
     <div class="card-header bg-dark">
         <h1 class="text-light">Consulta de Clientes</h1>
     </div>
+    <div class="card-body bg-dark">
+        <div class="input-group filter-input barra-input">
+            <InputSelect @bind-Value="Opcion" class="form-select">
+                <option value="1">Cliente Id</option>
+                <option value="2">RNC</option>
+                <option value="3">Nombres</option>
+            </InputSelect>
+            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+        </div>
+
+        <div class="col-6">
+            @switch (Opcion)
+            {
+                case 1:
+                    <InputNumber @bind-Value="clientes.ClienteId" class="form-control"></InputNumber>
+                    break;
+                case 2:
+                    <InputText @bind-Value="clientes.RNC" class="form-control"></InputText>
+                    break;
+                case 3:
+                    <InputText @bind-Value="clientes.Nombre" class="form-control"></InputText>
+                    break;
+                default:
+                    break;
+            }
+        </div>
+    </div>
     <div>
         <table class="table table-light table-hover table-striped table-bordered ">
             <thead class="table table-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
+                    <th scope="col">Nombres</th>
                     <th scope="col">Tel&eacute;fono</th>
                     <th scope="col">Celular</th>
                     <th scope="col">RNC</th>
                     <th scope="col">Email</th>
                     <th scope="col">Direcci&oacute;n</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +59,7 @@
                         <td>@item.RNC</td>
                         <td>@item.Email</td>
                         <td>@item.Direccion</td>
+                        <td><a href="RClientes/@item.ClienteId"><i class="bi bi-pencil-square" /></a></td>
                     </tr>
                 }
             </tbody>
@@ -41,11 +70,23 @@
     </div>
 </div>
 @code {
-
+    public int Opcion { get; set; }
     public List<Clientes> ListaClientes = new List<Clientes>();
+    public Clientes clientes = new Clientes();
 
     protected override async Task OnInitializedAsync()
     {
         ListaClientes = await clientesBLL.Listar(c => true);
+    }
+    public async Task Buscar()
+    {  
+        if (Opcion == 1 && clientes.ClienteId > 0)
+            ListaClientes = await clientesBLL.Listar(c => c.ClienteId == clientes.ClienteId);
+        else if (Opcion == 2 && !string.IsNullOrEmpty(clientes.RNC))
+            ListaClientes = await clientesBLL.Listar(c => c.RNC!.Contains(clientes.RNC!));
+        else if (Opcion == 3 && !string.IsNullOrEmpty(clientes.Nombre))
+            ListaClientes = await clientesBLL.Listar(c => c.Nombre!.ToLower().Contains(clientes.Nombre.ToLower()));
+        else
+            ListaClientes = await clientesBLL.Listar(p => true);
     }
 }

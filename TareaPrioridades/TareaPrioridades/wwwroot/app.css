@@ -4,6 +4,11 @@
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
 }
+.barra-input {
+    width: 180px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
 .alert-size {
     width: 285px;
     border: 1px;
