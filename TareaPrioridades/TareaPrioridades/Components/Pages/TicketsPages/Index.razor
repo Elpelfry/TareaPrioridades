@@ -82,7 +82,7 @@
                     <tr>
                         <td class="text-center">@item.Asunto</td>
                         <td class="text-center">@item.Solicitadopor</td>
-                        <td class="text-center">@item.Fecha</td>
+                        <td class="text-center">@item.Fecha.ToString("dd/MM/yyyy")</td>
                         <td class="text-center">
                             <a href="Dcliente/@item.ClienteId" class="btn btn-outline-primary bi bi-eye-fill"></a>
                         </td>
@@ -117,8 +117,8 @@
     public Tickets tickets = new Tickets();
     public int Opcion { get; set; }
 
-    public DateTime FechaInicio { get; set; } = DateTime.Now;
-    public DateTime FechaFin { get; set; } = DateTime.Now;
+    public DateTime FechaInicio { get; set; } = DateTime.Today;
+    public DateTime FechaFin { get; set; } = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
