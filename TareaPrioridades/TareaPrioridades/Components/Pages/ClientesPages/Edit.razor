@@ -15,35 +15,35 @@
             <div class="card-body bg-white">
                 <div class="row">
                     <div class="col-3">
-                        <label class="bi bi-person">Nombres</label>
+                        <label class="fw-bold bi bi-person"> Nombres</label>
                         <InputText @bind-Value="clientes.Nombre" @oninput="MensajeGuardar" class="form-control"></InputText>
                         <ValidationMessage For="@(() => clientes.Nombre)" />
                     </div>
                     <div class="col-3">
-                        <label class="bi bi-phone">Tel&eacute;fono</label>
+                        <label class="bi bi-phone"> Tel&eacute;fono</label>
                         <InputText @bind-Value="clientes.Telefono" @oninput="MensajeGuardar" class="form-control"></InputText>
                         <ValidationMessage For="@(() => clientes.Telefono)" />
                     </div>
                 </div>
                 <div class="row mt-1">
                     <div class="col-3">
-                        <label class="bi bi-phone">Celular</label>
+                        <label class="fw-bold bi bi-phone"> Celular</label>
                         <InputText @bind-Value="clientes.Celular" @oninput="MensajeGuardar" class="form-control"></InputText>
                         <ValidationMessage For="@(() => clientes.Celular)" />
                     </div>
                     <div class="col-3">
-                        <label class="bi bi-card-heading">RNC</label>
+                        <label class="fw-bold bi bi-card-heading"> RNC</label>
                         <InputText @bind-Value="clientes.RNC" @oninput="MensajeGuardar" class="form-control"></InputText>
                         <ValidationMessage For="@(() => clientes.RNC)" />
                     </div>
                 </div>
                 <div class="col-6 mt-1">
-                    <label class="bi bi-envelope">Email</label>
+                    <label class="fw-bold bi bi-envelope"> Email</label>
                     <InputText @bind-Value="clientes.Email" @oninput="MensajeGuardar" class="form-control"></InputText>
                     <ValidationMessage For="@(() => clientes.Email)" />
                 </div>
                 <div class="col-6 mt-1">
-                    <label class="bi bi-card-text">Direcci&oacute;n</label>
+                    <label class="fw-bold bi bi-card-text"> Direcci&oacute;n</label>
                     <InputText @bind-Value="clientes.Direccion" @oninput="MensajeGuardar" class="form-control"></InputText>
                     <ValidationMessage For="@(() => clientes.Direccion)" />
                 </div>

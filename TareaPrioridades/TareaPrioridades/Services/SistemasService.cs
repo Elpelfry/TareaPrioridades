@@ -16,6 +16,11 @@ namespace TareaPrioridades.Services
 
         public async Task<bool> Guardar(Sistemas sistema)
         {
+            if (_contexto.Sistemas!.Any(s => s.NombreSistema!.ToLower().Replace(" ", "") == sistema.NombreSistema!.ToLower().Replace(" ", "")
+            && s.SistemaId != sistema.SistemaId))
+            {
+                return false;
+            }
             if (!await Existe(sistema.SistemaId))
                 return await Insertar(sistema);
             else

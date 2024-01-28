@@ -13,13 +13,13 @@
         </div>
         <div class="card-body bg-light">
             <div class="col-4">
-                <label class="bi bi-card-text">Descripci&oacute;n</label>
+                <label class="fw-bold bi bi-card-text"> Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)" />
             </div>
             <div>
                 <div class="row">
-                    <label class="bi bi-calendar2-day mt-1">Dias Compromiso</label>
+                    <label class="fw-bold bi bi-calendar2-day mt-1"> Dias Compromiso</label>
                 </div>
                 <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)" />
