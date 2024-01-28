@@ -121,21 +121,6 @@
         }
     }
 
-    public async Task Eliminar()
-    {
-        if (await clientesBLL.Existe(clientes.ClienteId))
-        {
-            await clientesBLL.Eliminar(this.clientes);
-            this.Nuevo();
-            resultado = 1;
-            mensaje = "Registro Eliminado";
-        }
-        else
-        {
-            resultado = 2;
-            mensaje = "No Eliminado";
-        }
-    }
     public void MensajeGuardar()
     {
         resultado = 0;

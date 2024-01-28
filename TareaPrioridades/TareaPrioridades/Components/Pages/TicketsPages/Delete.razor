@@ -1,0 +1,74 @@
+﻿@page "/EliminarTickets";
+@page "/EliminarTickets/{TicketId:int}";
+@rendermode InteractiveServer
+@inject TicketsService ticketsService;
+
+<PageTitle>Eliminar Ticket</PageTitle>
+
+<div class="card shadow col-8">
+    <div class="card-header bg-dark">
+        <h1 class="text-light">Eliminar Ticket</h1>
+    </div>
+    <div class="card-header bg-secondary">
+        <h4 class="text-warning fw-bold">@mensaje</h4>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <p><strong class="text-primary bi bi-key">-ID:</strong> @tickets.TicketId</p>
+                <p><strong class="text-primary bi bi-key">-ID Cliente:</strong> @tickets.ClienteId</p>
+                <p><strong class="text-primary bi bi-key">-ID Prioridad:</strong> @tickets.PrioridadId</p>
+                <p><strong class="text-primary bi bi-key">-ID Sistema:</strong> @tickets.SistemaId</p>
+                <p><strong class="text-primary bi bi-calendar-date">-Fecha:</strong> @tickets.Fecha</p>
+                <p><strong class="text-primary bi bi-card-text">-Asunto:</strong> @tickets.Asunto</p>
+                <p><strong class="text-primary bi bi-person-badge-fill">-Solicitado Por:</strong> @tickets.Solicitadopor</p>
+                <p><strong class="text-primary bi bi-card-text">-Descripci&oacute;n:</strong> @tickets.Descripcion</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end input-group">
+        <a href="/IndexTickets" class="btn btn-primary bi bi-house-door-fill ms-auto">Volver</a>
+        <button type="button" class="btn btn-danger bi bi-trash-fill" @onclick="Eliminar">Eliminar</button>
+    </div>
+</div>
+@code {
+
+    [Parameter]
+    public int TicketId { get; set; }
+    public Tickets tickets { get; set; } = new Tickets();
+    public string? mensaje { get; set; } = "¿Éstas seguro que deseas eliminar el Ticket?";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TicketId > 0)
+        {
+            tickets.TicketId = TicketId;
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+
+        var ticketbuscado = await ticketsService.Buscar(tickets.TicketId);
+        if (ticketbuscado != null)
+        {
+            tickets = ticketbuscado;
+        }
+        else
+        {
+            tickets = new Tickets();
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await ticketsService.Eliminar(tickets);
+        if (eliminado)
+        {
+            tickets = new Tickets();
+            mensaje = "Ticket Eliminado...";
+            await Buscar();
+        }
+    }
+}

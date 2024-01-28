@@ -1,0 +1,144 @@
+﻿@page "/RTicket";
+@rendermode InteractiveServer
+@inject TicketsService ticketsService;
+@inject SistemasService sistemasService;
+@inject PrioridadesService prioridadesService;
+@inject ClientesService clientesService;
+
+<PageTitle>Registro Tickets</PageTitle>
+
+<EditForm Model="tickets" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card bg-dark shadow col-8">
+        <div class="card-header">
+            <h1 class="text-light">Registro de Tickets</h1>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row">
+                <div class="col col-2">
+                    <label class="fw-bold bi bi-key"> Prioridad:</label>
+                    <InputSelect @bind-Value="tickets.PrioridadId" class="form-select">
+                        @foreach (var prioridad in ListaPrioridades)
+                        {
+                            <option value="@prioridad.PrioridadId">@prioridad.Descripcion</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => tickets.PrioridadId)" />
+                </div>
+                <div class="col col-2">
+                    <label class="fw-bold bi bi-key"> Cliente:</label>
+                    <InputSelect @bind-Value="tickets.ClienteId" class="form-select">
+                        @foreach (var cliente in ListaClientes)
+                        {
+                            <option value="@cliente.ClienteId">@cliente.Nombre</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => tickets.ClienteId)" />
+                </div>
+                <div class="col col-2">
+                    <label class="fw-bold bi bi-key"> Sistema:</label>
+                    <InputSelect @bind-Value="tickets.SistemaId" class="form-select">
+                        @foreach (var sistema in ListaSistemas)
+                        {
+                            <option value="@sistema.SistemaId">@sistema.NombreSistema</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => tickets.SistemaId)" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-4">
+                    <label class="fw-bold bi bi-calendar-date"> Fecha</label>
+                    <InputDate @bind-Value="tickets.Fecha" class="form-control"></InputDate>
+                    <ValidationMessage For="@(() => tickets.Fecha)" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-3">
+                    <label class="fw-bold bi bi-person-badge-fill"> Solicitado Por:</label>
+                    <InputText @bind-Value="tickets.Solicitadopor" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => tickets.Solicitadopor)" />
+                </div>
+                <div class="col-3">
+                    <label class="fw-bold bi bi-pencil-square"> Asunto:</label>
+                    <InputText @bind-Value="tickets.Asunto" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => tickets.Asunto)" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <label class="fw-bold bi bi-card-text"> Descripci&oacute;n:</label>
+                    <InputText @bind-Value="tickets.Descripcion" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => tickets.Descripcion)" />
+                </div>
+            </div>
+        </div>
+        <div class="card-footer row">
+            <div class="input-group">
+                <a href="/IndexTickets" class="btn btn-primary bi bi-house-door-fill">Volver</a>
+                <button type="button" class="btn btn-secondary bi bi-file-earmark-diff-fill" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo</button>
+                <button type="submit" class="btn btn-success bi bi-floppy-fill">Guardar</button>
+            </div>
+            <div class="col col-3">
+                @if (resultado == 1)
+                {
+                    <p class="alert-success form-control m-1">@mensaje</p>
+                }
+                else if (resultado == 2)
+                {
+                    <p class="alert-danger form-control m-1">@mensaje</p>
+                }
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+
+    public Tickets tickets = new Tickets();
+    public List<Prioridades> ListaPrioridades { get; set; } = new List<Prioridades>();
+    public List<Sistemas> ListaSistemas { get; set; } = new List<Sistemas>();
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+
+    public string? mensaje { get; set; }
+    public int resultado { get; set; }
+    public int Opcion { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPrioridades = await prioridadesService.Listar(p => true);
+        ListaSistemas = await sistemasService.Listar(p => true);
+        ListaClientes = await clientesService.Listar(p => true);
+        tickets.Fecha = DateTime.Today;
+        
+    }
+
+    public void Nuevo()
+    {
+        tickets = new Tickets();
+        MensajeGuardar();
+        tickets.Fecha = DateTime.Today;
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await ticketsService.Guardar(tickets);
+        if (guardo)
+        {
+            resultado = 1;
+            mensaje = "Cambios Guardados";
+        }
+        else
+        {
+            resultado = 2;
+            mensaje = "Registro No Guardado";
+        }
+    }
+
+    public void MensajeGuardar()
+    {
+        resultado = 0;
+        mensaje = string.Empty;
+    }
+}
