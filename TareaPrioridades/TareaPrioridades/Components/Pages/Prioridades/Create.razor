@@ -1,0 +1,80 @@
+﻿@page "/RPrioridades";
+@rendermode InteractiveServer
+@inject PrioridadesService prioridadesService;
+
+<PageTitle>Registro Prioridad</PageTitle>
+
+<EditForm Model="prioridades" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card bg-dark shadow col-8">
+        <div class="card-header">
+            <h1 class="text-light">Registro de Prioridades</h1>
+        </div>
+        <div class="card-body bg-light">
+            <div class="col-4">
+                <label>Descripci&oacute;n</label>
+                <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control" ></InputText>
+                <ValidationMessage For="@(() => prioridades.Descripcion)"/>
+            </div>
+            <div>
+                <div class="row">
+                    <label>Dias Compromiso</label>
+                </div>
+                <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
+                <ValidationMessage For="@(() => prioridades.DiasCompromiso)"/>
+            </div>
+        </div>
+        <div class="card-footer row">
+            <div class="input-group">
+                <a href="/IndexPrioridades" class="btn btn-primary bi bi-house-door-fill">Volver</a>
+                <button type="button" class="btn btn-secondary bi bi-file-earmark-diff-fill" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo</button>
+                <button type="submit" class="btn btn-success bi bi-floppy-fill">Guardar</button>
+            </div>
+            <div class="col col-3">
+                @if (resultado == 1)
+                {
+                    <p class="alert-success form-control m-1">@mensaje</p>
+                }
+                else if (resultado == 2)
+                {
+                    <p class="alert-danger form-control m-1">@mensaje</p>
+                }
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    public Prioridades prioridades = new Prioridades();
+    public string? mensaje { get; set; }
+    public int resultado { get; set; }
+
+    public void Nuevo()
+    {
+        this.prioridades = new Prioridades();
+        MensajeGuardar();
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await prioridadesService.Guardar(this.prioridades);
+        if(guardo)
+        {
+            resultado = 1;
+            mensaje = "Registro Guardado";
+            this.prioridades = new Prioridades();
+        }
+        else
+        {
+            resultado = 2;
+            mensaje = "Registro No Guardado Descripción Ya Existe";
+        }
+    }
+
+    public void MensajeGuardar()
+    {
+        resultado = 0;
+        mensaje = string.Empty;
+    }
+}

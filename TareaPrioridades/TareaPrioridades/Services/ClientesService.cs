@@ -3,13 +3,13 @@ using System.Linq.Expressions;
 using TareaPrioridades.DAL;
 using TareaPrioridades.Models;
 
-namespace TareaPrioridades.BLL;
+namespace TareaPrioridades.Services;
 
-public class ClientesBLL
+public class ClientesService
 {
     private readonly Contexto _contexto;
 
-    public ClientesBLL(Contexto contexto)
+    public ClientesService(Contexto contexto)
     {
         _contexto = contexto;
     }
@@ -35,13 +35,13 @@ public class ClientesBLL
         _contexto.Update(cliente);
         int cantidad = await _contexto.SaveChangesAsync();
         _contexto.Entry(cliente).State = EntityState.Detached;
-        return  cantidad > 0;
+        return cantidad > 0;
     }
     public async Task<bool> Validar(Clientes cliente)
     {
-        var resultado = await (_contexto.Clientes!.AnyAsync(c =>
+        var resultado = await _contexto.Clientes!.AnyAsync(c =>
         (c.Nombre!.ToLower().Replace(" ", "") == cliente.Nombre!.ToLower().Replace(" ", "")
-        || c.RNC! == cliente.RNC!) && c.ClienteId != cliente.ClienteId));
+        || c.RNC! == cliente.RNC!) && c.ClienteId != cliente.ClienteId);
         return resultado;
     }
     public async Task<bool> Existe(int ClienteId)

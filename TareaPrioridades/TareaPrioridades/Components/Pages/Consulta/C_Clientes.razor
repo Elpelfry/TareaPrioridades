@@ -1,6 +1,6 @@
 ﻿@page "/CClientes"
 @rendermode InteractiveServer
-@inject ClientesBLL clientesBLL;
+@inject ClientesService clientesBLL;
 <PageTitle>Consulta Clientes</PageTitle>
 
 <div class="card bg-dark">
@@ -59,7 +59,7 @@
                         <td>@item.RNC</td>
                         <td>@item.Email</td>
                         <td>@item.Direccion</td>
-                        <td><a href="RClientes/@item.ClienteId"><i class="bi bi-pencil-square" /></a></td>
+                        <td><a href="RClientes/@item.ClienteId" class="btn btn-primary bi bi-pencil-square"></a></td>
                     </tr>
                 }
             </tbody>

@@ -4,19 +4,19 @@ using TareaPrioridades.Components.Pages;
 using TareaPrioridades.DAL;
 using TareaPrioridades.Models;
 
-namespace TareaPrioridades.BLL;
+namespace TareaPrioridades.Services;
 
-public class PrioridadesBLL
+public class PrioridadesService
 {
     private readonly Contexto _contexto;
 
-    public PrioridadesBLL(Contexto contexto)
+    public PrioridadesService(Contexto contexto)
     {
         _contexto = contexto;
     }
     public async Task<bool> Guardar(Prioridades prioridad)
     {
-        if (_contexto.Prioridades!.Any(p => p.Descripcion!.ToLower().Replace(" ","") == prioridad.Descripcion!.ToLower().Replace(" ", "") 
+        if (_contexto.Prioridades!.Any(p => p.Descripcion!.ToLower().Replace(" ", "") == prioridad.Descripcion!.ToLower().Replace(" ", "")
         && p.PrioridadId != prioridad.PrioridadId))
         {
             return false;
@@ -35,10 +35,10 @@ public class PrioridadesBLL
 
     public async Task<bool> Modificar(Prioridades prioridad)
     {
-        var p = await _contexto.Prioridades!.FindAsync(prioridad.PrioridadId);
-        _contexto.Entry(p!).State = EntityState.Detached;
-        _contexto.Entry(prioridad).State = EntityState.Modified;
-        return _contexto.SaveChanges() > 0;
+        _contexto.Update(prioridad);
+        int cantidad = await _contexto.SaveChangesAsync();
+        _contexto.Entry(prioridad).State = EntityState.Detached;
+        return cantidad > 0;
     }
 
     public async Task<bool> Existe(int PrioridadId)

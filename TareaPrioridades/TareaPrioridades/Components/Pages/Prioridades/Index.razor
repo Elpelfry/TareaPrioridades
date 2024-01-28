@@ -1,0 +1,94 @@
+﻿@page "/IndexPrioridades"
+@rendermode InteractiveServer
+@inject PrioridadesService prioridadesService;
+
+<PageTitle>Prioridades Home</PageTitle>
+
+<div class="card bg-dark shadow">
+    <div class="card-header bg-dark d-flex align-items-center justify-content-center">
+        <h1 class="text-light fw-bold">Prioridades</h1>
+    </div>
+    <div class="card-body bg-dark">
+        <div class="row filter-input ">
+            <div class="col col-2">
+                <div class="input-group">
+                    <InputSelect @bind-Value="Opcion" class="form-select">
+                        <option value="1">Prioridad Id</option>
+                        <option value="2">Descripci&oacute;n</option>
+                    </InputSelect>
+                    <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                </div>
+            </div>
+            <div class="col-auto">
+                <a href="/RPrioridades" class="btn btn-success bi bi-file-earmark-diff-fill">Crear</a>
+            </div>
+            <div class="col-auto">
+                @switch (Opcion)
+                {
+                    case 1:
+                        <InputNumber @bind-Value="prioridades.PrioridadId" class="form-control"></InputNumber>
+                        break;
+                    case 2:
+                        <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
+                        break;
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <table class="table table-light table-hover table-striped table-bordered ">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="text-center">Descripci&oacute;n</th>
+                    <th scope="col" class="text-center">Dias Compromiso</th>
+                    <th scope="col" class="text-center">Editar</th>
+                    <th scope="col" class="text-center">Detalles</th>
+                    <th scope="col" class="text-center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ListaPrioridades)
+                {
+                    <tr>
+                        <td class="text-center">@item.Descripcion</td>
+                        <td class="text-center">@item.DiasCompromiso</td>
+                        <td class="text-center">
+                            <a href="EditPrioridad/@item.PrioridadId" class="btn btn-primary bi bi-pencil-square"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="DetallePrioridad/@item.PrioridadId" class="btn btn-info bi bi-card-text"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="EliminarPrioridad/@item.PrioridadId" class="btn btn-danger bi bi-trash-fill"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="card-header text-white">
+            <p>Cantidad de Prioridades: @ListaPrioridades.Count</p>
+        </div>
+    </div>
+</div>
+@code {
+
+    public List<Prioridades> ListaPrioridades = new List<Prioridades>();
+    public Prioridades prioridades = new Prioridades();
+    public int Opcion { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPrioridades = await prioridadesService.Listar(c => true);
+    }
+    public async Task Buscar()
+    {
+        if (Opcion == 1 && prioridades.PrioridadId > 0)
+            ListaPrioridades = await prioridadesService.Listar(p => p.PrioridadId == prioridades.PrioridadId);
+
+        else if (Opcion == 2 && !string.IsNullOrEmpty(prioridades.Descripcion))
+            ListaPrioridades = await prioridadesService.Listar(p => p.Descripcion!.ToLower().Contains(prioridades.Descripcion.ToLower()));
+        else
+            ListaPrioridades = await prioridadesService.Listar(p => true);
+    }
+}
