@@ -15,9 +15,9 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <p><strong class="text-primary">ID:</strong> @prioridades.PrioridadId</p>
-                <p><strong class="text-primary">Descripci&oacute;n:</strong> @prioridades.Descripcion</p>
-                <p><strong class="text-primary">Dias Compromiso: </strong> @prioridades.DiasCompromiso</p>
+                <p><strong class="text-primary bi bi-key">-ID:</strong> @prioridades.PrioridadId</p>
+                <p><strong class="text-primary bi bi-card-text">-Descripci&oacute;n:</strong> @prioridades.Descripcion</p>
+                <p><strong class="text-primary bi bi-calendar2-day">-Dias Compromiso: </strong> @prioridades.DiasCompromiso</p>
             </div>
         </div>
     </div>
@@ -47,11 +47,11 @@
         var prioridadEncontrada = await prioridadesService.Buscar(prioridades.PrioridadId);
         if (prioridadEncontrada != null)
         {
-            this.prioridades = prioridadEncontrada;
+            prioridades = prioridadEncontrada;
         }
         else
         {
-            this.prioridades = new Prioridades();
+            prioridades = new Prioridades();
         }
     }
 
@@ -60,7 +60,7 @@
         var eliminado = await prioridadesService.Eliminar(prioridades);
         if (eliminado)
         {
-            this.prioridades = new Prioridades();
+            prioridades = new Prioridades();
             mensaje = "Prioridad Eliminada...";
             await Buscar();
         }

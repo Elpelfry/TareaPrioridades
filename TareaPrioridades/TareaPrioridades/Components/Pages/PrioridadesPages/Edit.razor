@@ -9,17 +9,17 @@
     <DataAnnotationsValidator />
     <div class="card bg-dark col-8 shadow">
         <div class="card-header">
-            <h1 class="text-light">Editar de Prioridades</h1>
+            <h1 class="text-light">Editar Prioridad</h1>
         </div>
         <div class="card-body bg-light">
             <div class="col-4">
-                <label>Descripci&oacute;n</label>
+                <label class="bi bi-card-text">Descripci&oacute;n</label>
                 <InputText @bind-Value="prioridades.Descripcion" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => prioridades.Descripcion)" />
             </div>
             <div>
                 <div class="row">
-                    <label>Dias Compromiso</label>
+                    <label class="bi bi-calendar2-day mt-1">Dias Compromiso</label>
                 </div>
                 <InputNumber @bind-Value="prioridades.DiasCompromiso" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
                 <ValidationMessage For="@(() => prioridades.DiasCompromiso)" />
@@ -72,7 +72,7 @@
         }
         else
         {
-            this.prioridades = new Prioridades();
+            prioridades = new Prioridades();
             resultado = 2;
             mensaje = "Registro no Encontrado";
         }
@@ -80,7 +80,7 @@
 
     public async Task Guardar()
     {
-        var guardo = await prioridadesService.Guardar(this.prioridades);
+        var guardo = await prioridadesService.Guardar(prioridades);
         if (guardo)
         {
             resultado = 1;

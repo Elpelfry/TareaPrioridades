@@ -10,29 +10,43 @@
     </div>
     <div class="card-body bg-dark">
         <div class="row filter-input ">
+            <label class="text-light fw-bold">Buscar por:</label>
             <div class="col col-2">
-                <div class="input-group">
-                    <InputSelect @bind-Value="Opcion" class="form-select">
-                        <option value="1">Prioridad Id</option>
-                        <option value="2">Descripci&oacute;n</option>
-                    </InputSelect>
-                    <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                <InputSelect @bind-Value="Opcion" class="form-select">
+                    <option value="1">Prioridad Id</option>
+                    <option value="2">Descripci&oacute;n</option>
+                </InputSelect>
+            </div>
+            @if (Opcion <= 0)
+            {
+                <div class="col-auto">
+                    <a href="/RPrioridades" class="btn btn-success bi bi-file-earmark-diff-fill">Crear</a>
                 </div>
-            </div>
-            <div class="col-auto">
-                <a href="/RPrioridades" class="btn btn-success bi bi-file-earmark-diff-fill">Crear</a>
-            </div>
+            }
             <div class="col-auto">
                 @switch (Opcion)
                 {
                     case 1:
-                        <InputNumber @bind-Value="prioridades.PrioridadId" class="form-control"></InputNumber>
+                        <div class="input-group">
+                            <InputNumber @bind-Value="prioridades.PrioridadId" class="form-control" min="0"></InputNumber>
+                            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                        </div>
                         break;
                     case 2:
-                        <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
+                        <div class="input-group">
+                            <InputText @bind-Value="prioridades.Descripcion" class="form-control"></InputText>
+                            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                        </div>
                         break;
                 }
+
             </div>
+            @if (Opcion > 0)
+            {
+                <div class="col-auto">
+                    <a href="/RPrioridades" class="btn btn-success bi bi-file-earmark-diff-fill">Crear</a>
+                </div>
+            }
         </div>
     </div>
     <div>

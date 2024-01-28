@@ -1,0 +1,125 @@
+﻿@page "/EditCliente";
+@page "/EditCliente/{ClienteId:int}";
+@rendermode InteractiveServer
+@inject ClientesService clientesService;
+
+<PageTitle>Editar Cliente</PageTitle>
+
+<EditForm Model="clientes" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card bg-dark col-8 shadow">
+        <div class="card bg-dark">
+            <div class="card-header">
+                <h1 class="text-light">Registro de Clientes</h1>
+            </div>
+            <div class="card-body bg-white">
+                <div class="row">
+                    <div class="col-3">
+                        <label class="bi bi-person">Nombres</label>
+                        <InputText @bind-Value="clientes.Nombre" @oninput="MensajeGuardar" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => clientes.Nombre)" />
+                    </div>
+                    <div class="col-3">
+                        <label class="bi bi-phone">Tel&eacute;fono</label>
+                        <InputText @bind-Value="clientes.Telefono" @oninput="MensajeGuardar" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => clientes.Telefono)" />
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-3">
+                        <label class="bi bi-phone">Celular</label>
+                        <InputText @bind-Value="clientes.Celular" @oninput="MensajeGuardar" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => clientes.Celular)" />
+                    </div>
+                    <div class="col-3">
+                        <label class="bi bi-card-heading">RNC</label>
+                        <InputText @bind-Value="clientes.RNC" @oninput="MensajeGuardar" class="form-control"></InputText>
+                        <ValidationMessage For="@(() => clientes.RNC)" />
+                    </div>
+                </div>
+                <div class="col-6 mt-1">
+                    <label class="bi bi-envelope">Email</label>
+                    <InputText @bind-Value="clientes.Email" @oninput="MensajeGuardar" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => clientes.Email)" />
+                </div>
+                <div class="col-6 mt-1">
+                    <label class="bi bi-card-text">Direcci&oacute;n</label>
+                    <InputText @bind-Value="clientes.Direccion" @oninput="MensajeGuardar" class="form-control"></InputText>
+                    <ValidationMessage For="@(() => clientes.Direccion)" />
+                </div>
+            </div>
+            <div class="card-footer row">
+                <div class="input-group">
+                    <a href="/IndexClientes" class="btn btn-primary bi bi-house-door-fill">Volver</a>
+                    <button type="submit" class="btn btn-success bi bi-floppy-fill">Guardar</button>
+                </div>
+                <div class="col col-3">
+                    @if (resultado == 1)
+                    {
+                        <p class="alert-success form-control m-1">@mensaje</p>
+                    }
+                    else if (resultado == 2)
+                    {
+                        <p class="alert-danger form-control m-1">@mensaje</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int ClienteId { get; set; }
+    public Clientes clientes { get; set; } = new Clientes();
+    public string? mensaje { get; set; }
+    public int resultado { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClienteId > 0)
+        {
+            clientes.ClienteId = ClienteId;
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        MensajeGuardar();
+        var clienteEncontrado = await clientesService.Buscar(clientes.ClienteId);
+        if (clienteEncontrado != null)
+        {
+            clientes = clienteEncontrado;
+        }
+        else
+        {
+            clientes = new Clientes();
+            resultado = 2;
+            mensaje = "Registro no Encontrado";
+        }
+    }
+
+    public async Task Guardar()
+    {
+        var guardo = await clientesService.Guardar(clientes);
+        if (guardo)
+        {
+            resultado = 1;
+            mensaje = "Cambios Guardados";
+        }
+        else
+        {
+            resultado = 2;
+            mensaje = "Registro No Guardado Descripción Ya Existe";
+        }
+    }
+
+    public void MensajeGuardar()
+    {
+        resultado = 0;
+        mensaje = string.Empty;
+    }
+}
