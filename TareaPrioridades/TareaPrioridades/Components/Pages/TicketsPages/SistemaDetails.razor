@@ -1,0 +1,56 @@
+﻿@page "/DSistema";
+@page "/DSistema/{SistemaId:int}";
+@rendermode InteractiveServer
+@inject SistemasService sistemasService;
+
+<PageTitle>Detalle Sistema</PageTitle>
+
+<div class="card shadow col-8">
+    <div class="card-header bg-dark">
+        <h1 class="text-light">Detalles Del Sistema</h1>
+    </div>
+    <div class="card-header bg-secondary">
+        <h4 class="text-white fw-bold">Detalles...</h4>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <p><strong class="text-primary bi bi-key">-ID:</strong> @sistemas.SistemaId</p>
+                <p><strong class="text-primary bi bi-card-text">-Nombre:</strong> @sistemas.NombreSistema</p>
+                <p><strong class="text-primary bi bi-card-text">-Descripci&oacute;n:</strong> @sistemas.DescripcionSistema</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+        <a href="/IndexTickets" class="btn btn-primary bi bi-house-door-fill mt-1 ms-auto">Volver</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int SistemaId { get; set; }
+    public Sistemas sistemas { get; set; } = new Sistemas();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (SistemaId > 0)
+        {
+            sistemas.SistemaId = SistemaId;
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+
+        var sistemabuscado = await sistemasService.Buscar(sistemas.SistemaId);
+        if (sistemabuscado != null)
+        {
+            sistemas = sistemabuscado;
+        }
+        else
+        {
+            sistemas = new Sistemas();
+        }
+    }
+}

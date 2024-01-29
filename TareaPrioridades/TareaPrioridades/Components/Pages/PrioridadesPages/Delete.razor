@@ -1,0 +1,68 @@
+﻿@page "/EliminarPrioridad";
+@page "/EliminarPrioridad/{PrioridadId:int}";
+@rendermode InteractiveServer
+@inject PrioridadesService prioridadesService;
+
+<PageTitle>Eliminar Prioridad</PageTitle>
+
+<div class="card shadow col-8">
+    <div class="card-header bg-dark">
+        <h1 class="text-light">Eliminar Prioridad</h1>
+    </div>
+    <div class="card-header bg-secondary">
+        <h4 class="text-warning fw-bold">@mensaje</h4>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <p><strong class="text-primary bi bi-key">-ID:</strong> @prioridades.PrioridadId</p>
+                <p><strong class="text-primary bi bi-card-text">-Descripci&oacute;n:</strong> @prioridades.Descripcion</p>
+                <p><strong class="text-primary bi bi-calendar2-day">-Dias Compromiso: </strong> @prioridades.DiasCompromiso</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end input-group">
+        <a href="/IndexPrioridades" class="btn btn-primary bi bi-house-door-fill ms-auto">Volver</a>
+        <button type="button" class="btn btn-danger bi bi-trash-fill" @onclick="Eliminar">Eliminar</button>
+    </div>
+</div>
+@code {
+
+    [Parameter]
+    public int PrioridadId { get; set; }
+    public Prioridades prioridades = new Prioridades();
+    public string? mensaje { get; set; } = "¿Éstas seguro que deseas eliminar la Prioridad?";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (PrioridadId > 0)
+        {
+            prioridades.PrioridadId = PrioridadId;
+            await Buscar();
+        }
+    }
+
+    public async Task Buscar()
+    {
+        var prioridadEncontrada = await prioridadesService.Buscar(prioridades.PrioridadId);
+        if (prioridadEncontrada != null)
+        {
+            prioridades = prioridadEncontrada;
+        }
+        else
+        {
+            prioridades = new Prioridades();
+        }
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminado = await prioridadesService.Eliminar(prioridades);
+        if (eliminado)
+        {
+            prioridades = new Prioridades();
+            mensaje = "Prioridad Eliminada...";
+            await Buscar();
+        }
+    }
+}

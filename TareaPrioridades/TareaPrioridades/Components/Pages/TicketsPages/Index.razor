@@ -1,0 +1,139 @@
+﻿@page "/IndexTickets"
+@rendermode InteractiveServer
+@inject TicketsService ticketsService;
+
+<PageTitle>Tickets Home</PageTitle>
+
+<div class="card bg-dark shadow">
+    <div class="card-header bg-dark d-flex align-items-center justify-content-center">
+        <h1 class="text-light fw-bold">Tickets</h1>
+    </div>
+    <div class="card-body bg-dark">
+        <div class="row filter-input ">
+            <label class="text-light fw-bold">Buscar por:</label>
+            <div class="col col-2">
+                <InputSelect @bind-Value="Opcion" class="form-select">
+                    <option value="1">Id</option>
+                    <option value="2">Asunto</option>
+                    <option value="3">Fecha</option>
+                </InputSelect>
+            </div>
+            @if (Opcion <= 0)
+            {
+                <div class="col-auto">
+                    <a href="/RTicket" class="btn btn-success bi bi-file-earmark-diff-fill">Crear</a>
+                </div>
+            }
+            <div class="col-auto">
+                @switch (Opcion)
+                {
+                    case 1:
+                        <div class="input-group">
+                            <InputNumber @bind-Value="tickets.TicketId" class="form-control" min="0"></InputNumber>
+                            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                        </div>
+                        break;
+                    case 2:
+                        <div class="input-group">
+                            <InputText @bind-Value="tickets.Asunto" class="form-control"></InputText>
+                            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                        </div>
+                        break;
+                    case 3:
+                        <div class="input-group">
+                            <InputDate @bind-Value="FechaInicio" class="form-control"></InputDate>
+                            <InputDate @bind-Value="FechaFin" class="form-control"></InputDate>
+                            <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
+                        </div>
+                        break;
+                }
+            </div>
+            @if (Opcion > 0)
+            {
+                <div class="col-auto">
+                    <a href="/RTicket" class="btn btn-success bi bi-file-earmark-diff-fill">Crear</a>
+                </div>
+            }
+            <div class="col d-flex justify-content-end">
+                <a href="/IndexClientes" class="btn btn-primary bi bi-card-text"> Clientes</a>
+                <a href="/IndexPrioridades" class="btn btn-primary bi bi-card-text "> Prioridades</a>
+                <a href="/IndexSistemas" class="btn btn-primary bi bi-card-text "> Sistemas</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <table class="table table-light table-hover table-striped table-bordered ">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="text-center">Asunto</th>
+                    <th scope="col" class="text-center">Solicitado Por</th>
+                    <th scope="col" class="text-center">Fecha</th>
+                    <th scope="col" class="text-center">Cliente</th>
+                    <th scope="col" class="text-center">Prioridad</th>
+                    <th scope="col" class="text-center">Sistema</th>
+                    <th scope="col" class="text-center">Editar</th>
+                    <th scope="col" class="text-center">Detalles</th>
+                    <th scope="col" class="text-center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ListaTickets)
+                {
+                    <tr>
+                        <td class="text-center">@item.Asunto</td>
+                        <td class="text-center">@item.Solicitadopor</td>
+                        <td class="text-center">@item.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td class="text-center">
+                            <a href="Dcliente/@item.ClienteId" class="btn btn-outline-primary bi bi-eye-fill"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="DPrioridad/@item.PrioridadId" class="btn btn-outline-primary bi bi-eye-fill"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="DSistema/@item.SistemaId" class="btn btn-outline-primary bi bi-eye-fill"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="EditTickets/@item.TicketId" class="btn btn-primary bi bi-pencil-square"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="DetalleTickets/@item.TicketId" class="btn btn-info bi bi-card-text"></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="EliminarTickets/@item.TicketId" class="btn btn-danger bi bi-trash-fill"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="card-header text-white">
+            <p>Cantidad de Tickets: @ListaTickets.Count</p>
+        </div>
+    </div>
+</div>
+@code {
+
+    public List<Tickets> ListaTickets = new List<Tickets>();
+    public Tickets tickets = new Tickets();
+    public int Opcion { get; set; }
+
+    public DateTime FechaInicio { get; set; } = DateTime.Today;
+    public DateTime FechaFin { get; set; } = DateTime.Today;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTickets = await ticketsService.Listar(s => true);
+    }
+    public async Task Buscar()
+    {
+        if (Opcion == 1 && tickets.TicketId > 0)
+            ListaTickets = await ticketsService.Listar(t => t.TicketId == tickets.TicketId);
+
+        else if (Opcion == 2 && !string.IsNullOrEmpty(tickets.Asunto))
+            ListaTickets = await ticketsService.Listar(t => t.Asunto!.ToLower().Contains(tickets.Asunto.ToLower()));
+        else if (Opcion == 3 && FechaFin != default && FechaInicio != default)
+            ListaTickets = await ticketsService.Listar(t => t.Fecha <= FechaFin && t.Fecha >= FechaInicio);
+        else
+            ListaTickets = await ticketsService.Listar(t => true);
+    }
+}

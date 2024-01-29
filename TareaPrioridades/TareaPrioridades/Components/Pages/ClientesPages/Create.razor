@@ -1,71 +1,68 @@
 ﻿@page "/RClientes"
 @page "/RClientes/{ClienteId:int}"
 @rendermode InteractiveServer
-@inject ClientesBLL clientesBLL;
+@inject ClientesService clientesBLL;
 
 <PageTitle>Registro Cliente</PageTitle>
 
 <EditForm Model="clientes" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator/>
-    <div class="card bg-dark">
+    <DataAnnotationsValidator />
+    <div class="card bg-dark col-8 shadow">
         <div class="card-header">
             <h1 class="text-light">Registro de Clientes</h1>
         </div>
         <div class="card-body bg-white">
-            <label>ClienteID</label>
-            <div class="input-group">
-                <InputNumber @bind-Value="clientes.ClienteId" @oninput="MensajeGuardar" min="0" class="number-input"></InputNumber>
-                <button type="button" class="btn btn-primary bi bi-search" @onclick="Buscar"></button>
-            </div>
             <div class="row">
                 <div class="col-3">
-                    <label>Nombres</label>
+                    <label class="fw-bold bi bi-person"> Nombres</label>
                     <InputText @bind-Value="clientes.Nombre" @oninput="MensajeGuardar" class="form-control"></InputText>
                     <ValidationMessage For="@(() => clientes.Nombre)" />
                 </div>
                 <div class="col-3">
-                    <label>Tel&eacute;fono</label>
+                    <label class="fw-bold bi bi-phone"> Tel&eacute;fono</label>
                     <InputText @bind-Value="clientes.Telefono" @oninput="MensajeGuardar" class="form-control"></InputText>
                     <ValidationMessage For="@(() => clientes.Telefono)" />
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-1">
                 <div class="col-3">
-                    <label>Celular</label>
+                    <label class="fw-bold bi bi-phone"> Celular</label>
                     <InputText @bind-Value="clientes.Celular" @oninput="MensajeGuardar" class="form-control"></InputText>
                     <ValidationMessage For="@(() => clientes.Celular)" />
                 </div>
                 <div class="col-3">
-                    <label>RNC</label>
+                    <label class="fw-bold bi bi-card-heading"> RNC</label>
                     <InputText @bind-Value="clientes.RNC" @oninput="MensajeGuardar" class="form-control"></InputText>
                     <ValidationMessage For="@(() => clientes.RNC)" />
                 </div>
             </div>
-            <div class="col-6">
-                <label>Email</label>
+            <div class="col-6 mt-1">
+                <label class="fw-bold bi bi-envelope"> Email</label>
                 <InputText @bind-Value="clientes.Email" @oninput="MensajeGuardar" class="form-control"></InputText>
                 <ValidationMessage For="@(() => clientes.Email)" />
             </div>
-            <div class="col-6">
-                <label>Direcci&oacute;n</label>
+            <div class="col-6 mt-1">
+                <label class="fw-bold bi bi-card-text"> Direcci&oacute;n</label>
                 <InputText @bind-Value="clientes.Direccion" @oninput="MensajeGuardar" class="form-control"></InputText>
-                <ValidationMessage For="@(() => clientes.Direccion)"/>
+                <ValidationMessage For="@(() => clientes.Direccion)" />
             </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer row">
             <div class="input-group">
-                <button type="button" class="btn btn-primary bi bi-file-earmark-diff-fill" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo</button>
-                <button type="button" class="btn btn-danger bi bi-trash-fill" @onclick="Eliminar">Eliminar</button>
+                <a href="/IndexClientes" class="btn btn-primary bi bi-house-door-fill">Volver</a>
+                <button type="button" class="btn btn-secondary bi bi-file-earmark-diff-fill" @onclick="Nuevo" @oninput="MensajeGuardar">Nuevo</button>
                 <button type="submit" class="btn btn-success bi bi-floppy-fill">Guardar</button>
             </div>
-            @if (resultado==1)
-            {
-                <p class="alert-success alert-size">@mensaje</p>
-            }
-            else if(resultado == 2)
-            {
-                <p class="alert-danger alert-size">@mensaje</p>
-            }
+            <div class="col col-3">
+                @if (resultado == 1)
+                {
+                    <p class="alert-success form-control m-1">@mensaje</p>
+                }
+                else if (resultado == 2)
+                {
+                    <p class="alert-danger form-control m-1">@mensaje</p>
+                }
+            </div>
         </div>
     </div>
 </EditForm>
@@ -83,7 +80,7 @@
         if (ClienteId > 0)
         {
             clientes.ClienteId = ClienteId;
-           await Buscar();
+            await Buscar();
         }
     }
     public async Task Buscar()
@@ -124,21 +121,6 @@
         }
     }
 
-    public async Task Eliminar()
-    {
-        if (await clientesBLL.Existe(clientes.ClienteId))
-        {
-            await clientesBLL.Eliminar(this.clientes);
-            this.Nuevo();
-            resultado = 1;
-            mensaje = "Registro Eliminado";
-        }
-        else
-        {
-            resultado = 2;
-            mensaje = "No Eliminado";
-        }
-    }
     public void MensajeGuardar()
     {
         resultado = 0;

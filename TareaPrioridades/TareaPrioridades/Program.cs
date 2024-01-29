@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using TareaPrioridades.BLL;
 using TareaPrioridades.Components;
 using TareaPrioridades.DAL;
+using TareaPrioridades.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +11,10 @@ builder.Services.AddRazorComponents()
 
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 builder.Services.AddDbContext<Contexto>(options => options.UseSqlite(ConStr));
-builder.Services.AddScoped<PrioridadesBLL>();
-builder.Services.AddScoped<ClientesBLL>();
+builder.Services.AddScoped<PrioridadesService>();
+builder.Services.AddScoped<ClientesService>();
+builder.Services.AddScoped<SistemasService>();
+builder.Services.AddScoped<TicketsService>();
 
 var app = builder.Build();
 
