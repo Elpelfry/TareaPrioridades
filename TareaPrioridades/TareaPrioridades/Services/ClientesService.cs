@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using TareaPrioridades.DAL;
 using TareaPrioridades.Models;
-
 namespace TareaPrioridades.Services;
 
 public class ClientesService
